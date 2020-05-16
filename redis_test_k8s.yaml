@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-cache
+  namespace: test-namespace
+spec:
+  selector:
+    matchLabels:
+      app: redis-cache
+  replicas: 1
+  template: #template for the pods
+    metadata:
+      annotations:
+        kubernetes.io/change-cause: "test"
+      labels:
+        app: redis-cache
+    spec:
+      containers:
+        - name: redis-cache
+          image: redis:latest
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "200Mi"
+            limits:
+              memory: "225Mi"
+      restartPolicy: Always
+
+#      nodeSelector:
+#         nodeTwo: node153
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-cache
+  namespace: test-namespace
+spec:
+  selector:
+    app: redis-cache
+
+  ports:
+    - name: redis-cport
+      port: 6379
+      targetPort: 6379
+      # nodePort: 30379
+  type: ClusterIP
+  # type: NodePort
