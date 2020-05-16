@@ -2,6 +2,8 @@ spring:
   application:
     name: sample-spring-redis
   redis:
-    host: 192.168.99.100
+#    host: 192.168.0.101 # for local
+    host: redis-cache # for k8s and docker-compose
+    port: 6379
 server:
-  port: 8090
+  port: 8080
